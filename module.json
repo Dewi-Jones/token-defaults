@@ -16,10 +16,12 @@
     }
   ],
   "esmodules": [
-	"scripts/token-defaults.mjs"
+    "scripts/token-defaults.mjs"
   ],
   "styles": [
-	"styles/token-defaults.css"
+    {
+      "src": "styles/token-defaults.css"
+    }
   ],
   "languages": [
     {
@@ -32,5 +34,6 @@
   "flags": {
     "canUpload": false
   },
-  "description": "A system agnostic module that provides the ability to define Token Defaults in addition to Core Prototype Token Overrides."
+  "description": "<p>A system agnostic module that provides the ability to define Token Defaults in addition to Core Prototype Token Overrides.</p>",
+  "url": "https://github.com/Dewi-Jones/token-defaults"
 }
