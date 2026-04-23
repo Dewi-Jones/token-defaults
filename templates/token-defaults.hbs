@@ -5,32 +5,32 @@
         <p class="hint">{{localize "TOKEN_DEFAULTS.SETTINGS.MENU.Hint"}}</p>
         {{~/if}}
 		<fieldset>
-			<legend>{{tab.fieldsets.identity}}</legend>
-			{{formGroup tab.fields.displayName id=(concat @root.id "." tab.id ".displayName") name=(concat tab.id ".displayName") value=tab.data.displayName}}
-			{{formGroup tab.fields.disposition id=(concat @root.id "." tab.id ".disposition") name=(concat tab.id ".disposition") value=tab.data.disposition}}
+			<legend>{{localize tab.fieldsets.identity}}</legend>
+			{{formGroup tab.fields.displayName id=(concat @root.id "." tab.id ".displayName") name=(concat tab.id ".displayName") value=tab.data.displayName localize=true}}
+			{{formGroup tab.fields.disposition id=(concat @root.id "." tab.id ".disposition") name=(concat tab.id ".disposition") value=tab.data.disposition localize=true}}
 		</fieldset>
 		<fieldset>
-			<legend>{{tab.fieldsets.vision}}</legend>
-			{{formGroup tab.fields.sight.enabled id=(concat @root.id "." tab.id ".sight.enabled") name=(concat tab.id ".sight.enabled") value=tab.data.sight.enabled}}
+			<legend>{{localize tab.fieldsets.vision}}</legend>
+			{{formGroup tab.fields.sight.enabled id=(concat @root.id "." tab.id ".sight.enabled") name=(concat tab.id ".sight.enabled") value=tab.data.sight.enabled localize=true}}
 		</fieldset>
 		<fieldset>
-			<legend>{{tab.fieldsets.dtr}}</legend>
-			{{formGroup tab.fields.ring.enabled id=(concat @root.id "." tab.id ".ring.enabled") name=(concat tab.id ".ring.enabled") value=tab.data.ring.enabled}}
-			{{formGroup tab.fields.ring.colors.ring id=(concat @root.id "." tab.id ".ring.colors.ring") name=(concat tab.id ".ring.colors.ring") value=tab.data.ring.colors.ring}}
-			{{formGroup tab.fields.ring.colors.background id=(concat @root.id "." tab.id ".ring.colors.background") name=(concat tab.id ".ring.colors.background") value=tab.data.ring.colors.background}}
+			<legend>{{localize tab.fieldsets.dtr}}</legend>
+			{{formGroup tab.fields.ring.enabled id=(concat @root.id "." tab.id ".ring.enabled") name=(concat tab.id ".ring.enabled") value=tab.data.ring.enabled localize=true}}
+			{{formGroup tab.fields.ring.colors.ring id=(concat @root.id "." tab.id ".ring.colors.ring") name=(concat tab.id ".ring.colors.ring") value=tab.data.ring.colors.ring localize=true}}
+			{{formGroup tab.fields.ring.colors.background id=(concat @root.id "." tab.id ".ring.colors.background") name=(concat tab.id ".ring.colors.background") value=tab.data.ring.colors.background localize=true}}
 		</fieldset>
 		<fieldset>
-			<legend>{{tab.fieldsets.resources}}</legend>
-			{{formGroup tab.fields.displayBars id=(concat @root.id "." tab.id ".displayBars") name=(concat tab.id ".displayBars") value=tab.data.displayBars}}
-			{{formGroup tab.fields.bar1.attribute id=(concat @root.id "." tab.id ".bar1.attribute") name=(concat tab.id ".bar1.attribute") value=tab.data.bar1.attribute}}
-			{{formGroup tab.fields.bar2.attribute id=(concat @root.id "." tab.id ".bar2.attribute") name=(concat tab.id ".bar2.attribute") value=tab.data.bar2.attribute}}
+			<legend>{{localize tab.fieldsets.resources}}</legend>
+			{{formGroup tab.fields.displayBars id=(concat @root.id "." tab.id ".displayBars") name=(concat tab.id ".displayBars") value=tab.data.displayBars localize=true}}
+			{{formGroup tab.fields.bar1.attribute id=(concat @root.id "." tab.id ".bar1.attribute") name=(concat tab.id ".bar1.attribute") value=tab.data.bar1.attribute localize=true}}
+			{{formGroup tab.fields.bar2.attribute id=(concat @root.id "." tab.id ".bar2.attribute") name=(concat tab.id ".bar2.attribute") value=tab.data.bar2.attribute localize=true}}
 		</fieldset>
 		<fieldset>
-		<legend>{{tab.fieldsets.ctm}}</legend>
-			{{formGroup tab.fields.turnMarker.mode id=(concat @root.id "." tab.id ".turnMarker.mode") name=(concat tab.id ".turnMarker.mode") value=tab.data.turnMarker.mode}}
-			{{formGroup tab.fields.turnMarker.animation id=(concat @root.id "." tab.id ".turnMarker.animation") name=(concat tab.id ".turnMarker.animation") value=tab.data.turnMarker.animation}}
-			{{formGroup tab.fields.turnMarker.src id=(concat @root.id "." tab.id ".turnMarker.src") name=(concat tab.id ".turnMarker.src") value=tab.data.turnMarker.src}}
-			{{formGroup tab.fields.turnMarker.disposition id=(concat @root.id "." tab.id ".turnMarker.disposition") name=(concat tab.id ".turnMarker.disposition") value=tab.data.turnMarker.disposition}}
+		<legend>{{localize tab.fieldsets.ctm}}</legend>
+			{{formGroup tab.fields.turnMarker.mode id=(concat @root.id "." tab.id ".turnMarker.mode") name=(concat tab.id ".turnMarker.mode") value=tab.data.turnMarker.mode localize=true}}
+			{{formGroup tab.fields.turnMarker.animation id=(concat @root.id "." tab.id ".turnMarker.animation") name=(concat tab.id ".turnMarker.animation") value=tab.data.turnMarker.animation localize=true}}
+			{{formGroup tab.fields.turnMarker.src id=(concat @root.id "." tab.id ".turnMarker.src") name=(concat tab.id ".turnMarker.src") value=tab.data.turnMarker.src localize=true}}
+			{{formGroup tab.fields.turnMarker.disposition id=(concat @root.id "." tab.id ".turnMarker.disposition") name=(concat tab.id ".turnMarker.disposition") value=tab.data.turnMarker.disposition localize=true}}
 		</fieldset>
 	</section>
 	{{/each}}

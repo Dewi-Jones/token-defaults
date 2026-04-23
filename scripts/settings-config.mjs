@@ -57,57 +57,57 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 	}
 	
 	#prepareTabs() {
-		const bool = { true: _loc("COMMON.Yes"), false: _loc("COMMON.No") };
+		const bool = { true: "COMMON.Yes", false: "COMMON.No" };
 		
 		const tokenDisplayModes = foundry.utils.invertObject(CONST.TOKEN_DISPLAY_MODES);
 		for ( const [key] of Object.entries(tokenDisplayModes) ) {
-			tokenDisplayModes[key] = _loc(`TOKEN.DISPLAY_${tokenDisplayModes[key]}`)
+			tokenDisplayModes[key] = `TOKEN.DISPLAY_${tokenDisplayModes[key]}`
 		}
 		
 		const tokenDispositions = foundry.utils.invertObject(CONST.TOKEN_DISPOSITIONS);
 		for ( const [key] of Object.entries(tokenDispositions) ) {
-			tokenDispositions[key] = _loc(`TOKEN.DISPOSITION.${tokenDispositions[key]}`)
+			tokenDispositions[key] = `TOKEN.DISPOSITION.${tokenDispositions[key]}`
 		}
 		
 		const tokenTurnMarkerModes = foundry.utils.invertObject(CONST.TOKEN_TURN_MARKER_MODES);
 		for ( const [key] of Object.entries(tokenTurnMarkerModes) ) {
-			tokenTurnMarkerModes[key] = _loc(`TOKEN.TURNMARKER.MODES.${tokenTurnMarkerModes[key]}`)
+			tokenTurnMarkerModes[key] = `TOKEN.TURNMARKER.MODES.${tokenTurnMarkerModes[key]}`
 		}
 		
 		const tokenTurnMarkerAnimation = {
-			"spin": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN"),
-			"spinPulse": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN_PULSE"),
-			"pulse": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.PULSE")
+			"spin": "COMBAT.TURN_MARKERS.ANIMATIONS.SPIN",
+			"spinPulse": "COMBAT.TURN_MARKERS.ANIMATIONS.SPIN_PULSE",
+			"pulse": "COMBAT.TURN_MARKERS.ANIMATIONS.PULSE"
 		}
 		
 		const fields = {
-			displayName: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: _loc("TOKEN.FIELDS.displayName.label") }),
-			disposition: new StringField({ initial: undefined, required: false, choices: tokenDispositions, label: _loc("TOKEN.FIELDS.disposition.label") }),
-			displayBars: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: _loc("TOKEN.FIELDS.displayBars.label") }),
-			bar1: { attribute: new StringField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.bar1.attribute.label") })},
-			bar2: { attribute: new StringField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.bar2.attribute.label") })},
-			sight: { enabled: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.sight.enabled.label") })},
+			displayName: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: "TOKEN.FIELDS.displayName.label" }),
+			disposition: new StringField({ initial: undefined, required: false, choices: tokenDispositions, label: "TOKEN.FIELDS.disposition.label" }),
+			displayBars: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: "TOKEN.FIELDS.displayBars.label" }),
+			bar1: { attribute: new StringField({ initial: undefined, required: false, label: "TOKEN.FIELDS.bar1.attribute.label" })},
+			bar2: { attribute: new StringField({ initial: undefined, required: false, label: "TOKEN.FIELDS.bar2.attribute.label" })},
+			sight: { enabled: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.sight.enabled.label" })},
 			ring: { 
-				enabled: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.ring.enabled.label") }),
+				enabled: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.ring.enabled.label" }),
 				colors: {
-					ring: new ColorField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.ring.colors.ring.label") }),
-					background: new ColorField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.ring.colors.background.label") })
+					ring: new ColorField({ initial: undefined, required: false, label: "TOKEN.FIELDS.ring.colors.ring.label" }),
+					background: new ColorField({ initial: undefined, required: false, label: "TOKEN.FIELDS.ring.colors.background.label" })
 				},
 			},
 			turnMarker: {
-				mode: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerModes, label: _loc("TOKEN.FIELDS.turnMarker.mode.label") }),
-				animation: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerAnimation, label: _loc("TOKEN.FIELDS.turnMarker.animation.label") }),
-				src: new FilePathField({ initial: undefined, required: false, categories: ["IMAGE"], label: _loc("TOKEN.FIELDS.turnMarker.src.label") }),
-				disposition: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.turnMarker.disposition.label") }),
+				mode: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerModes, label: "TOKEN.FIELDS.turnMarker.mode.label" }),
+				animation: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerAnimation, label: "TOKEN.FIELDS.turnMarker.animation.label" }),
+				src: new FilePathField({ initial: undefined, required: false, categories: ["IMAGE"], label: "TOKEN.FIELDS.turnMarker.src.label" }),
+				disposition: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.turnMarker.disposition.label" }),
 			}
 		};
 		
 		const fieldsets = {
-			identity: _loc("TOKEN.TABS.identity"),
-			dtr: _loc("TOKEN.RING.SHEET.legend"),
-			vision: _loc("TOKEN.TABS.vision"),
-			resources: _loc("TOKEN.TABS.resources"),
-			ctm: _loc("TOKEN.TURNMARKER.SHEET.legend")
+			identity: "TOKEN.TABS.identity",
+			dtr: "TOKEN.RING.SHEET.legend",
+			vision: "TOKEN.TABS.vision",
+			resources: "TOKEN.TABS.resources",
+			ctm: "TOKEN.TURNMARKER.SHEET.legend"
 		}
 		
 		return Actor.TYPES.reduce((prev, type) => {
@@ -140,7 +140,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			window: {
 				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label"
 			},
-			content: `<p><strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning")}</p>`,
+			content: `<p><strong>${"COMMON.AreYouSure"}</strong> ${"TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning"}</p>`,
 			yes: {
 				callback: async () => {
 					await Actor.TYPES.forEach((type) => {
