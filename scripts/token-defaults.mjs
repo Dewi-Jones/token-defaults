@@ -1,48 +1,77 @@
-Hooks.once("ready", () => {
+import TokenDefaultsConfig from "./settings-config.mjs"
+
+Hooks.once("init", () => {
 	
-	const actorTypes = Object.keys(CONFIG.Actor.typeLabels);
-	actorTypes.splice(0,1); // get rid of base actor type
+	game.settings.registerMenu("token-defaults", "settings-config", {
+		name: "TOKEN_DEFAULTS.SETTINGS.MENU.Name",
+		label: "TOKEN_DEFAULTS.SETTINGS.MENU.Label",
+		icon: "fa-solid fa-circle-user",
+		type: TokenDefaultsConfig,
+		restricted: true
+	});
 	
-	actorTypes.forEach((type) => {
+	Actor.TYPES.forEach((type) => {
 		game.settings.register("token-defaults", type, {
 			name: `TYPES.Actor.${type}`,
-			hint: "The ID of the actor used as a default for actors of this type.",
 			scope: "world",
-			config: true,
+			config: false,
 			requiresReload: false,
-			type: String
+			type: Object,
+			default: {}
 		});
-		getCreateActor(type)
+	});
+	
+	game.settings.register("token-defaults", "token-create", {
+		name: "TOKEN_DEFAULTS.SETTINGS.TOKEN_CREATE.Name",
+		hint: "TOKEN_DEFAULTS.SETTINGS.TOKEN_CREATE.Hint",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: false,
+		requiresReload: false,
+	});
+	
+	game.settings.register("token-defaults", "actor-create", {
+		name: "TOKEN_DEFAULTS.SETTINGS.ACTOR_CREATE.Name",
+		hint: "TOKEN_DEFAULTS.SETTINGS.ACTOR_CREATE.Hint",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
+		requiresReload: false,
+	});
+	
+	game.settings.register("token-defaults", "compendium", {
+		name: "TOKEN_DEFAULTS.SETTINGS.COMPENDIUM.Name",
+		hint: "TOKEN_DEFAULTS.SETTINGS.COMPENDIUM.Hint",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
+		requiresReload: false,
 	});
 });
 
-async function getCreateActor(type) {
+Hooks.on("createActor", defaultPrototypeTokenSettings);
+Hooks.on("createToken", defaultTokenSettings);
+
+async function defaultPrototypeTokenSettings(document) {
+	if ( !game.settings.get("token-defaults", "actor-create") ) return
+	if ( document.uuid.startsWith("Compendium") && !game.settings.get("token-defaults", "compendium") ) return
 	
-	let actor = game.actors.get(game.settings.get("token-defaults", type));
-	if ( actor ) return
+	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.type) ?? {}, { inplace: false });
+	if ( Object.keys(defaults).length === 0 ) return
 	
-	actor = await Actor.create({
-		name: `default-token-${type}`,
-		type: type
-	});
-	
-	game.settings.set("token-defaults", type, actor.id);
+	await document.update({"prototypeToken": defaults});
+	console.log(`Token Defaults Applied to ${document.uuid} (${document.name})`);
 }
 
-Hooks.on("createActor", defaultTokenSettings);
-
 async function defaultTokenSettings(document) {
+	if ( !game.settings.get("token-defaults", "token-create") ) return
 	
-	const defaultPrototypeToken = game.actors.get(game.settings.get("token-defaults", document.type)).prototypeToken.toObject();
+	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.actor?.type) ?? {}, { inplace: false });
+	if ( Object.keys(defaults).length === 0 ) return
 	
-	delete defaultPrototypeToken.actorLink;
-	delete defaultPrototypeToken.depth;
-	delete defaultPrototypeToken.height;
-	delete defaultPrototypeToken.width;
-	delete defaultPrototypeToken.texture;
-	delete defaultPrototypeToken.ring.subject;
-	delete defaultPrototypeToken.name;
-	delete defaultPrototypeToken.randomImg;
-	
-	await document.update({"prototypeToken": defaultPrototypeToken});
+	await document.update(defaults);
+	console.log(`Token Defaults Applied to ${document.uuid} (${document.name})`);
 }

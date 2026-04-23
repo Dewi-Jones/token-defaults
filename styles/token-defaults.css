@@ -1,0 +1,12 @@
+#token-defaults .window-content {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+#token-defaults footer {
+    grid-column: span 2;
+}
+
+#token-defaults section.scrollable {
+    max-height: 600px;
+    overflow: hidden auto;
+}
