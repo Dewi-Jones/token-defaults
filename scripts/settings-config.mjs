@@ -1,5 +1,5 @@
 const { HandlebarsApplicationMixin, Application } = foundry.applications.api;
-const { StringField } = foundry.data.fields;
+const { StringField, ColorField, FilePathField } = foundry.data.fields;
 
 export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application) {
 	
@@ -57,57 +57,57 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 	}
 	
 	#prepareTabs() {
-		const bool = { true: game.i18n.localize("COMMON.Yes"), false: game.i18n.localize("COMMON.No") };
+		const bool = { true: _loc("COMMON.Yes"), false: _loc("COMMON.No") };
 		
 		const tokenDisplayModes = foundry.utils.invertObject(CONST.TOKEN_DISPLAY_MODES);
 		for ( const [key] of Object.entries(tokenDisplayModes) ) {
-			tokenDisplayModes[key] = game.i18n.localize(`TOKEN.DISPLAY_${tokenDisplayModes[key]}`)
+			tokenDisplayModes[key] = _loc(`TOKEN.DISPLAY_${tokenDisplayModes[key]}`)
 		}
 		
 		const tokenDispositions = foundry.utils.invertObject(CONST.TOKEN_DISPOSITIONS);
 		for ( const [key] of Object.entries(tokenDispositions) ) {
-			tokenDispositions[key] = game.i18n.localize(`TOKEN.DISPOSITION.${tokenDispositions[key]}`)
+			tokenDispositions[key] = _loc(`TOKEN.DISPOSITION.${tokenDispositions[key]}`)
 		}
 		
 		const tokenTurnMarkerModes = foundry.utils.invertObject(CONST.TOKEN_TURN_MARKER_MODES);
 		for ( const [key] of Object.entries(tokenTurnMarkerModes) ) {
-			tokenTurnMarkerModes[key] = game.i18n.localize(`TOKEN.TURNMARKER.MODES.${tokenTurnMarkerModes[key]}`)
+			tokenTurnMarkerModes[key] = _loc(`TOKEN.TURNMARKER.MODES.${tokenTurnMarkerModes[key]}`)
 		}
 		
 		const tokenTurnMarkerAnimation = {
-			"spin": game.i18n.localize("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN"),
-			"spinPulse": game.i18n.localize("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN_PULSE"),
-			"pulse": game.i18n.localize("COMBAT.TURN_MARKERS.ANIMATIONS.PULSE")
+			"spin": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN"),
+			"spinPulse": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.SPIN_PULSE"),
+			"pulse": _loc("COMBAT.TURN_MARKERS.ANIMATIONS.PULSE")
 		}
 		
 		const fields = {
-			displayName: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: game.i18n.localize("TOKEN.FIELDS.displayName.label") }),
-			disposition: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: tokenDispositions, label: game.i18n.localize("TOKEN.FIELDS.disposition.label") }),
-			displayBars: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: game.i18n.localize("TOKEN.FIELDS.displayBars.label") }),
-			bar1: { attribute: new foundry.data.fields.StringField({ initial: undefined, required: false, label: game.i18n.localize("TOKEN.FIELDS.bar1.attribute.label") })},
-			bar2: { attribute: new foundry.data.fields.StringField({ initial: undefined, required: false, label: game.i18n.localize("TOKEN.FIELDS.bar2.attribute.label") })},
-			sight: { enabled: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: bool, label: game.i18n.localize("TOKEN.FIELDS.sight.enabled.label") })},
+			displayName: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: _loc("TOKEN.FIELDS.displayName.label") }),
+			disposition: new StringField({ initial: undefined, required: false, choices: tokenDispositions, label: _loc("TOKEN.FIELDS.disposition.label") }),
+			displayBars: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: _loc("TOKEN.FIELDS.displayBars.label") }),
+			bar1: { attribute: new StringField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.bar1.attribute.label") })},
+			bar2: { attribute: new StringField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.bar2.attribute.label") })},
+			sight: { enabled: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.sight.enabled.label") })},
 			ring: { 
-				enabled: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: bool, label: game.i18n.localize("TOKEN.FIELDS.ring.enabled.label") }),
+				enabled: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.ring.enabled.label") }),
 				colors: {
-					ring: new foundry.data.fields.ColorField({ initial: undefined, required: false, label: game.i18n.localize("TOKEN.FIELDS.ring.colors.ring.label") }),
-					background: new foundry.data.fields.ColorField({ initial: undefined, required: false, label: game.i18n.localize("TOKEN.FIELDS.ring.colors.background.label") })
+					ring: new ColorField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.ring.colors.ring.label") }),
+					background: new ColorField({ initial: undefined, required: false, label: _loc("TOKEN.FIELDS.ring.colors.background.label") })
 				},
 			},
 			turnMarker: {
-				mode: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: tokenTurnMarkerModes, label: game.i18n.localize("TOKEN.FIELDS.turnMarker.mode.label") }),
-				animation: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: tokenTurnMarkerAnimation, label: game.i18n.localize("TOKEN.FIELDS.turnMarker.animation.label") }),
-				src: new foundry.data.fields.FilePathField({ initial: undefined, required: false, categories: ["IMAGE"], label: game.i18n.localize("TOKEN.FIELDS.turnMarker.src.label") }),
-				disposition: new foundry.data.fields.StringField({ initial: undefined, required: false, choices: bool, label: game.i18n.localize("TOKEN.FIELDS.turnMarker.disposition.label") }),
+				mode: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerModes, label: _loc("TOKEN.FIELDS.turnMarker.mode.label") }),
+				animation: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerAnimation, label: _loc("TOKEN.FIELDS.turnMarker.animation.label") }),
+				src: new FilePathField({ initial: undefined, required: false, categories: ["IMAGE"], label: _loc("TOKEN.FIELDS.turnMarker.src.label") }),
+				disposition: new StringField({ initial: undefined, required: false, choices: bool, label: _loc("TOKEN.FIELDS.turnMarker.disposition.label") }),
 			}
 		};
 		
 		const fieldsets = {
-			identity: game.i18n.localize("TOKEN.TABS.identity"),
-			dtr: game.i18n.localize("TOKEN.RING.SHEET.legend"),
-			vision: game.i18n.localize("TOKEN.TABS.vision"),
-			resources: game.i18n.localize("TOKEN.TABS.resources"),
-			ctm: game.i18n.localize("TOKEN.TURNMARKER.SHEET.legend")
+			identity: _loc("TOKEN.TABS.identity"),
+			dtr: _loc("TOKEN.RING.SHEET.legend"),
+			vision: _loc("TOKEN.TABS.vision"),
+			resources: _loc("TOKEN.TABS.resources"),
+			ctm: _loc("TOKEN.TURNMARKER.SHEET.legend")
 		}
 		
 		return Actor.TYPES.reduce((prev, type) => {
@@ -118,7 +118,6 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 				cssClass: type === "base" ? "active" : "",
 				fields,
 				fieldsets,
-				scrollable: [".scrollable"],
 				data: game.settings.get("token-defaults", type),
 			};
 			return prev;
@@ -141,7 +140,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			window: {
 				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label"
 			},
-			content: `<p><strong>${game.i18n.localize("COMMON.AreYouSure")}</strong> ${game.i18n.localize("TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning")}</p>`,
+			content: `<p><strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning")}</p>`,
 			yes: {
 				callback: async () => {
 					await Actor.TYPES.forEach((type) => {
