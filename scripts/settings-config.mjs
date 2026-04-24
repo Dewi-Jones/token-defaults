@@ -140,7 +140,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			window: {
 				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label"
 			},
-			content: `<p><strong>${"COMMON.AreYouSure"}</strong> ${"TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning"}</p>`,
+			content: `<p><strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning")}</p>`,
 			yes: {
 				callback: async () => {
 					await Actor.TYPES.forEach((type) => {

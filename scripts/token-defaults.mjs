@@ -55,18 +55,20 @@ Hooks.once("init", () => {
 Hooks.on("createActor", defaultPrototypeTokenSettings);
 Hooks.on("createToken", defaultTokenSettings);
 
-async function defaultPrototypeTokenSettings(document) {
+async function defaultPrototypeTokenSettings(document, options, userId) {
+	if ( game.user.id !== userId ) return
 	if ( !game.settings.get("token-defaults", "actor-create") ) return
 	if ( document.uuid.startsWith("Compendium") && !game.settings.get("token-defaults", "compendium") ) return
 	
 	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.type) ?? {}, { inplace: false });
 	if ( Object.keys(defaults).length === 0 ) return
 	
-	await document.update({"prototypeToken": defaults});
+	await document.update({prototypeToken: defaults});
 	console.log(`Token Defaults Applied to ${document.uuid} (${document.name})`);
 }
 
-async function defaultTokenSettings(document) {
+async function defaultTokenSettings(document, options, userId) {
+	if ( game.user.id !== userId ) return
 	if ( !game.settings.get("token-defaults", "token-create") ) return
 	
 	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.actor?.type) ?? {}, { inplace: false });
