@@ -36,6 +36,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			buttons: this.#prepareButtons(),
 			tabs: this.#prepareTabs(),
 			tabClasses: "vertical",
+			verticalTabs: true,
 			id: this.id
 		};
 	}
@@ -57,7 +58,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 	}
 	
 	#prepareTabs() {
-		const bool = { true: "COMMON.Yes", false: "COMMON.No" };
+		const bool = game.release.generation > 13 ? { true: "COMMON.Yes", false: "COMMON.No" } : { true: "Yes", false: "No" };
 		
 		const tokenDisplayModes = foundry.utils.invertObject(CONST.TOKEN_DISPLAY_MODES);
 		for ( const [key] of Object.entries(tokenDisplayModes) ) {
