@@ -10,6 +10,10 @@
 			{{formGroup tab.fields.disposition id=(concat @root.id "." tab.id ".disposition") name=(concat tab.id ".disposition") value=tab.data.disposition localize=true}}
 		</fieldset>
 		<fieldset>
+			<legend>{{localize tab.fieldsets.appearance}}</legend>
+			{{formGroup tab.fields.lockRotation id=(concat @root.id "." tab.id ".lockRotation") name=(concat tab.id ".lockRotation") value=tab.data.lockRotation localize=true}}
+		</fieldset>
+		<fieldset>
 			<legend>{{localize tab.fieldsets.vision}}</legend>
 			{{formGroup tab.fields.sight.enabled id=(concat @root.id "." tab.id ".sight.enabled") name=(concat tab.id ".sight.enabled") value=tab.data.sight.enabled localize=true}}
 		</fieldset>

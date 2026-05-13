@@ -95,6 +95,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 					background: new ColorField({ initial: undefined, required: false, label: "TOKEN.FIELDS.ring.colors.background.label" })
 				},
 			},
+			lockRotation: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.lockRotation.label" }),
 			turnMarker: {
 				mode: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerModes, label: "TOKEN.FIELDS.turnMarker.mode.label" }),
 				animation: new StringField({ initial: undefined, required: false, choices: tokenTurnMarkerAnimation, label: "TOKEN.FIELDS.turnMarker.animation.label" }),
@@ -105,6 +106,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		
 		const fieldsets = {
 			identity: "TOKEN.TABS.identity",
+			appearance: "TOKEN.TABS.appearance",
 			dtr: "TOKEN.RING.SHEET.legend",
 			vision: "TOKEN.TABS.vision",
 			resources: "TOKEN.TABS.resources",
