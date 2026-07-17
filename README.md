@@ -21,4 +21,69 @@ Though the module was developed and tested primarely in dnd5e, it is designed as
 
 The Configuration Dialog lets you configure various aspects of Tokens for the different Actor Types. The `[All Types]` tab can be used to apply a setting regardless of actor type. If a setting is present for `[All Types]` and a specific Actor Type, the setting of the specific Actor Type takes priority.
 
-<img width="438" height="841" alt="grafik" src="https://github.com/user-attachments/assets/f1c0c7a4-83cc-49f5-ab45-410b90b65e31" />
+Currently, these options can be configured:
+
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=4>Identity</td>
+            <td>Display Name</td>
+        </tr>
+        <tr>
+          <td>Token Disposition</td>
+        </tr>
+        <tr>
+          <td>Append Incrementing Number (Prototype Tokens only)</td>
+        </tr>
+        <tr>
+          <td>Prepend Random Adjective (Prototype Tokens only)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Appearance</td>
+            <td>Lock Artwork Rotation</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Vision</td>
+            <td>Vision Enabled</td>
+        </tr>
+        <tr>
+            <td rowspan=3>Dynamic Token Ring</td>
+            <td>Ring Enabled</td>
+        </tr>
+        <tr>
+          <td>Ring Color</td>
+        </tr>
+        <tr>
+          <td>Background Color</td>
+        </tr>
+        <tr>
+            <td rowspan=3>Resources</td>
+            <td> Display Bars</td>
+        </tr>
+        <tr>
+          <td>Bar 1 Attribute</td>
+        </tr>
+        <tr>
+          <td>Bar 2 Attribute</td>
+        </tr>
+        <tr>
+            <td rowspan=4>Combat Turn Marker</td>
+            <td>Mode</td>
+        </tr>
+        <tr>
+          <td>Animation</td>
+        </tr>
+        <tr>
+          <td>Media Source</td>
+        </tr>
+        <tr>
+          <td>Disposition Tint</td>
+        </tr>
+    </tbody>
+</table>
