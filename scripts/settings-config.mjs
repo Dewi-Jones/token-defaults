@@ -1,5 +1,5 @@
 const { HandlebarsApplicationMixin, Application } = foundry.applications.api;
-const { StringField, ColorField, FilePathField } = foundry.data.fields;
+const { StringField, ColorField, FilePathField, NumberField } = foundry.data.fields;
 
 export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application) {
 	
@@ -18,10 +18,10 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		form: {
 			submitOnChange: false,
 			closeOnSubmit: true,
-			handler: TokenDefaultsConfig.#onSubmit,
+			handler: this._onSubmit,
 		},
 		actions: {
-			onReset: TokenDefaultsConfig.#onReset,
+			onReset: this._onReset,
 		},
 	};
 
@@ -33,15 +33,15 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 
 	async _prepareContext(options) {
 		return {
-			buttons: this.#prepareButtons(),
-			tabs: this.#prepareTabs(),
+			buttons: this._prepareButtons(),
+			tabs: this._prepareTabs(),
 			tabClasses: "vertical",
 			verticalTabs: true,
 			id: this.id
 		};
 	}
 	
-	#prepareButtons(){
+	_prepareButtons(){
 		return [
 			{
 				type: "button",
@@ -57,7 +57,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		];
 	}
 	
-	#prepareTabs() {
+	_prepareTabs() {
 		const bool = game.release.generation > 13 ? { true: "COMMON.Yes", false: "COMMON.No" } : { true: "Yes", false: "No" };
 		
 		const tokenDisplayModes = foundry.utils.invertObject(CONST.TOKEN_DISPLAY_MODES);
@@ -85,6 +85,11 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			displayName: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: "TOKEN.FIELDS.displayName.label" }),
 			disposition: new StringField({ initial: undefined, required: false, choices: tokenDispositions, label: "TOKEN.FIELDS.disposition.label" }),
 			displayBars: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: "TOKEN.FIELDS.displayBars.label" }),
+			appendNumber: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.appendNumber.label" }),
+			occludable:{
+				radius: new NumberField({ initial: undefined, required: false, label: "TOKEN.FIELDS.occludable.radius.label" })
+			},
+			prependAdjective: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.prependAdjective.label" }),
 			bar1: { attribute: new StringField({ initial: undefined, required: false, label: "TOKEN.FIELDS.bar1.attribute.label" })},
 			bar2: { attribute: new StringField({ initial: undefined, required: false, label: "TOKEN.FIELDS.bar2.attribute.label" })},
 			sight: { enabled: new StringField({ initial: undefined, required: false, choices: bool, label: "TOKEN.FIELDS.sight.enabled.label" })},
@@ -127,10 +132,12 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		}, {});
 	}
 	
-	static async #onSubmit(event, form, formData) {
+	static async _onSubmit(event, form, formData) {
 		const booleanOrNullish = {true: true, false: false, null: null, "": undefined};
 		for ( const [key, value] of Object.entries(formData.object) ) {
 			if ( value in booleanOrNullish ) formData.object[key] = booleanOrNullish[value]
+			if ( key.includes("occludable.radius") && value === null ) delete formData.object[key]
+			if ( formData.object[key] === undefined ) delete formData.object[key]
 		}
 		
 		for ( const [key, value] of Object.entries(foundry.utils.expandObject(formData.object)) ) {
@@ -138,7 +145,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		}
 	}
 
-	static async #onReset() {
+	static async _onReset() {
 		await foundry.applications.api.DialogV2.confirm({
 			window: {
 				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label"
@@ -147,7 +154,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			yes: {
 				callback: async () => {
 					await Actor.TYPES.forEach((type) => {
-						game.settings.set("token-defaults", type, undefined);
+						game.settings.set("token-defaults", type, {});
 					});
 					await this.close();
 				}

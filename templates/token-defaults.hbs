@@ -8,6 +8,9 @@
 			<legend>{{localize tab.fieldsets.identity}}</legend>
 			{{formGroup tab.fields.displayName id=(concat @root.id "." tab.id ".displayName") name=(concat tab.id ".displayName") value=tab.data.displayName localize=true}}
 			{{formGroup tab.fields.disposition id=(concat @root.id "." tab.id ".disposition") name=(concat tab.id ".disposition") value=tab.data.disposition localize=true}}
+			{{formGroup tab.fields.occludable.radius id=(concat @root.id "." tab.id ".occludable.radius") name=(concat tab.id ".occludable.radius") value=tab.data.occludable.radius localize=true}}
+			{{formGroup tab.fields.appendNumber id=(concat @root.id "." tab.id ".appendNumber") name=(concat tab.id ".appendNumber") value=tab.data.appendNumber localize=true}}
+			{{formGroup tab.fields.prependAdjective id=(concat @root.id "." tab.id ".prependAdjective") name=(concat tab.id ".prependAdjective") value=tab.data.prependAdjective localize=true}}
 		</fieldset>
 		<fieldset>
 			<legend>{{localize tab.fieldsets.appearance}}</legend>
