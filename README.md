@@ -32,7 +32,7 @@ Currently, these options can be configured:
     </thead>
     <tbody>
         <tr>
-            <td rowspan=4>Identity</td>
+            <td rowspan=5>Identity</td>
             <td>Display Name</td>
         </tr>
         <tr>
@@ -43,6 +43,9 @@ Currently, these options can be configured:
         </tr>
         <tr>
           <td>Prepend Random Adjective (Prototype Tokens only)</td>
+        </tr>
+        <tr>
+          <td>Occlusion Radius</td>
         </tr>
         <tr>
             <td rowspan=1>Appearance</td>
