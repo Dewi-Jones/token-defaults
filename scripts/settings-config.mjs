@@ -216,7 +216,8 @@ export class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application)
 		const defaults = {};
 		
 		if ( input.actorType !== "base" ) {
-			defaults[input.actorType] = getDefaults(input.actorType, input.tokenType)
+			defaults[input.actorType] = getDefaults(input.actorType, input.tokenType);
+			if ( foundry.utils.isEmpty(defaults[input.actorType]) ) delete defaults[input.actorType]
 		} else {
 			Actor.TYPES.forEach((type) => {
 				defaults[type] = getDefaults(type, input.tokenType);
@@ -234,8 +235,14 @@ export class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application)
 		} else {
 			game.scenes.forEach((scene) => {
 				const updates = scene.tokens.reduce((result, token) => {
-					if ( !token.actor?.type ) return
-					if ( !defaults[token.actor.type] ) return
+					if ( !token.actor ) {
+						result.push(foundry.utils.mergeObject({_id: token.id}, defaults.base, { inplace: false }))
+						return result
+					}
+					if ( !defaults[token.actor.type] ) {
+						result.push(foundry.utils.mergeObject({_id: token.id}, defaults.base, { inplace: false }))
+						return result
+					}
 					result.push(foundry.utils.mergeObject({_id: token.id}, defaults[token.actor.type], { inplace: false }))
 					return result
 				}, []);
