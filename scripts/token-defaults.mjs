@@ -1,4 +1,4 @@
-import TokenDefaultsConfig from "./settings-config.mjs"
+import { TokenDefaultsConfig, getDefaults } from "./settings-config.mjs"
 
 Hooks.once("init", () => {
 	
@@ -55,25 +55,26 @@ Hooks.once("init", () => {
 Hooks.on("createActor", defaultPrototypeTokenSettings);
 Hooks.on("createToken", defaultTokenSettings);
 
-async function defaultPrototypeTokenSettings(document, options, userId) {
+async function defaultPrototypeTokenSettings(actor, options, userId) {
 	if ( game.user.id !== userId ) return
-	if ( !game.settings.get("token-defaults", "actor-create") ) return
-	if ( document.uuid.startsWith("Compendium") && !game.settings.get("token-defaults", "compendium") ) return
+	if ( !game.settings.get("token-defaults", "actor-create") && !actor.uuid.startsWith("Compendium") ) return
+	if ( !game.settings.get("token-defaults", "compendium") && actor.uuid.startsWith("Compendium") ) return
 	
-	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.type) ?? {}, { inplace: false });
-	if ( Object.keys(defaults).length === 0 ) return
+	const defaults = getDefaults(actor.type, "prototype")
+	if ( foundry.utils.isEmpty(defaults) ) return
 	
-	await document.update({prototypeToken: defaults});
-	console.log(`Token Defaults Applied to ${document.uuid} (${document.name})`);
+	await actor.update({prototypeToken: defaults});
+	console.log(`Prototype Token Defaults Applied to ${actor.uuid} (${actor.name})`);
 }
 
-async function defaultTokenSettings(document, options, userId) {
+async function defaultTokenSettings(token, options, userId) {
 	if ( game.user.id !== userId ) return
 	if ( !game.settings.get("token-defaults", "token-create") ) return
+	if ( !token.actor?.type ) return console.log(`No Actor Type found for ${token.uuid} (${token.name})`)
 	
-	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", document.actor?.type) ?? {}, { inplace: false });
-	if ( Object.keys(defaults).length === 0 ) return
+	const defaults = getDefaults(token.actor.type, "token");
+	if ( foundry.utils.isEmpty(defaults) ) return
 	
-	await document.update(defaults);
-	console.log(`Token Defaults Applied to ${document.uuid} (${document.name})`);
+	await token.update(defaults);
+	console.log(`Token Defaults Applied to ${token.uuid} (${token.name})`);
 }

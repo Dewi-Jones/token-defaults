@@ -1,9 +1,9 @@
-const { HandlebarsApplicationMixin, Application } = foundry.applications.api;
+const { HandlebarsApplicationMixin, Application, DialogV2 } = foundry.applications.api;
 const { StringField, ColorField, FilePathField, NumberField } = foundry.data.fields;
+const { createFormGroup, createSelectInput } = foundry.applications.fields;
 
-export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application) {
+export class TokenDefaultsConfig extends HandlebarsApplicationMixin(Application) {
 	
-	/** @inheritdoc */
 	static DEFAULT_OPTIONS = {
 		id: "token-defaults",
 		tag: "form",
@@ -22,6 +22,7 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 		},
 		actions: {
 			onReset: this._onReset,
+			applyDefaults: this._applyDefaults,
 		},
 	};
 
@@ -48,6 +49,12 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 				icon: "fa-solid fa-arrow-rotate-left",
 				label: "TOKEN_DEFAULTS.SETTINGS.MENU.Reset",
 				action: "onReset"
+			},
+			{
+				type: "button",
+				icon: "fa-solid fa-user-pen",
+				label: "TOKEN_DEFAULTS.SETTINGS.MENU.Apply.Label",
+				action: "applyDefaults"
 			},
 			{
 				type: "submit",
@@ -80,6 +87,10 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			"spinPulse": "COMBAT.TURN_MARKERS.ANIMATIONS.SPIN_PULSE",
 			"pulse": "COMBAT.TURN_MARKERS.ANIMATIONS.PULSE"
 		}
+		
+		// If left empty: 
+		// StringField/ColorField/FilePathField -> ""
+		// NumberField -> null
 		
 		const fields = {
 			displayName: new StringField({ initial: undefined, required: false, choices: tokenDisplayModes, label: "TOKEN.FIELDS.displayName.label" }),
@@ -146,9 +157,13 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 	}
 
 	static async _onReset() {
-		await foundry.applications.api.DialogV2.confirm({
+		await DialogV2.confirm({
 			window: {
-				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label"
+				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Label",
+				icon: "fa-solid fa-arrow-rotate-left"
+			},
+			position: {
+				width: 400,
 			},
 			content: `<p><strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("TOKEN_DEFAULTS.SETTINGS.MENU.Confirm.Warning")}</p>`,
 			yes: {
@@ -161,4 +176,81 @@ export default class TokenDefaultsConfig extends HandlebarsApplicationMixin(Appl
 			}
 		});
 	}
+	
+	static async _applyDefaults(event, form, formData) {
+		const content = window.document.createElement("div");
+		const warning = window.document.createElement("p");
+		warning.innerHTML = `<strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("TOKEN_DEFAULTS.SETTINGS.MENU.Apply.Warning")}`;
+		const actorType = createFormGroup({
+			label: _loc("TOKEN_DEFAULTS.SETTINGS.MENU.Apply.ActorType"),
+			input: createSelectInput({
+				name: "actorType",
+				options: Actor.TYPES.map(type => ({value: type, label: type === "base" ? _loc("SETTINGS.PrototypeTokenOverrides.TABS.AllTypes.Label") : _loc(`TYPES.Actor.${type}`)})),
+				disabled: Actor.TYPES.length <= 1
+			}),
+			classes: Actor.TYPES.length === 1 ? ["hidden"] : []
+		});
+		const tokenType = createFormGroup({
+			label: _loc("TOKEN_DEFAULTS.SETTINGS.MENU.Apply.TokenType"),
+			input: createSelectInput({
+				name: "tokenType",
+				options: [{value: "token", label: _loc("DOCUMENT.Tokens")}, {value: "prototype", label: _loc("TOKEN_DEFAULTS.SETTINGS.MENU.Apply.Prototype")}]
+			}),
+		});
+		content.append(warning, actorType, tokenType);
+		
+		const input = await DialogV2.input({
+			window: {
+				title: "TOKEN_DEFAULTS.SETTINGS.MENU.Apply.Title",
+				icon: "fa-solid fa-user-pen"
+			},
+			position: {
+				width: 400,
+			},
+			content,
+			ok: {label: "TOKEN_DEFAULTS.SETTINGS.MENU.Apply.Label"}
+		});
+		
+		if ( !input ) return
+		
+		const defaults = {};
+		
+		if ( input.actorType !== "base" ) {
+			defaults[input.actorType] = getDefaults(input.actorType, input.tokenType)
+		} else {
+			Actor.TYPES.forEach((type) => {
+				defaults[type] = getDefaults(type, input.tokenType);
+				if ( foundry.utils.isEmpty(defaults[type]) ) delete defaults[type]
+			});
+		}
+		if ( foundry.utils.isEmpty(defaults) ) return
+		
+		if ( input.tokenType === "prototype" ) {
+			game.actors.updateAll(
+				actor => ( {prototypeToken: defaults[actor.type]} ),
+				actor => ( !!defaults[actor.type] )
+			);
+			console.log("Defaults applied to Prototype Tokens.");
+		} else {
+			game.scenes.forEach((scene) => {
+				const updates = scene.tokens.reduce((result, token) => {
+					if ( !token.actor?.type ) return
+					if ( !defaults[token.actor.type] ) return
+					result.push(foundry.utils.mergeObject({_id: token.id}, defaults[token.actor.type], { inplace: false }))
+					return result
+				}, []);
+				if ( !updates ) return
+				if ( updates.length === 0 ) return
+				scene.updateEmbeddedDocuments("Token", updates);
+				console.log(`Defaults applied to ${updates.length} Tokens in scene: ${scene.name} (${scene.id})`);
+			})
+		}
+	}
+}
+
+export function getDefaults(actorType, tokenType) {
+	const defaults = foundry.utils.mergeObject(game.settings.get("token-defaults", "base") ?? {}, game.settings.get("token-defaults", actorType) ?? {}, { inplace: false });
+	if ( tokenType === "token" && defaults.appendNumber !== undefined ) delete defaults.appendNumber
+	if ( tokenType === "token" && defaults.prependAdjective !== undefined ) delete defaults.prependAdjective
+	return defaults
 }
